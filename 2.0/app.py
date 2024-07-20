@@ -1,6 +1,11 @@
 import streamlit as st
-#The Model
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn import metrics
 
+
+#The Model
 data = pd.read_csv("2.0/PremDataProcessed.csv")
 data = data.drop(columns=["Position", "Average_Market_Value", "Unnamed: 0"])
 
