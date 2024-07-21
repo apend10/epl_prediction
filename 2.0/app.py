@@ -39,15 +39,41 @@ predictions = multi_lin_reg_model.predict(latest_year_df[inputs])
 latest_year_df["Predicted_Points"] = predictions.round()
 
 latest_year_df.sort_values(by="Predicted_Points", ascending=False, inplace=True)
-latest_year_df = latest_year_df[["Year", "Team", "Normalized_Average_Market_Value", "Goal_Difference", "Goal_Difference", "Points", "Predicted_Points"]]
+latest_year_df = latest_year_df[["Year", "Team", "Normalized_Average_Market_Value", "Goal_Difference", "Points", "Predicted_Points"]]
 
 
-st.write("""
-# Premier League Prediction Model
-""")
+st.write("""# Premier League Prediction Model""")
 
-teams = latest_year_df["Team"].tolist()
-team = st.radio("Pick a team to predict", teams)
+col1, col2 = st.columns(2)
 
-index = latest_year_df["Team"].tolist().index(team)
-st.write("# Number of points: ", latest_year_df["Predicted_Points"].tolist()[index])
+with col1:
+    teams = latest_year_df["Team"].tolist()
+    team = st.radio("Pick a team to predict", teams)
+
+    index = latest_year_df["Team"].tolist().index(team)
+
+with col2:
+    st.write("# Points: ", latest_year_df["Predicted_Points"].tolist()[index])
+
+st.write("")  # spacer
+
+# Initialize session state
+if 'button_clicked' not in st.session_state:
+    st.session_state.button_clicked = False
+
+# Function to handle button click
+def button_click():
+    st.session_state.button_clicked = True
+
+# Conditionally render the button and DataFrame
+if not st.session_state.button_clicked:
+    if st.button('Show DataFrame For Detailed Data'):
+        button_click()
+        st.experimental_rerun()  # Rerun the script to immediately reflect the change
+else:
+    st.write(latest_year_df)
+
+
+
+#if(st.button("Show Dataframe")):
+#    st.dataframe(latest_year_df[["Year", "Team", "Normalized_Average_Market_Value", "Goal_Difference", "Points", "Predicted_Points"]])
